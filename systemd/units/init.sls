@@ -26,7 +26,7 @@ systemd_systemd_units_file_{{ unit }}_{{ unittype }}:
 
 systemd_systemd_units_cmd_enable_or_disable_{{ unit }}_{{ unittype }}:
   cmd.wait:  # noqa: 213
-    - name: systemctl {{ unit_status }} {{ unit }}.{{ unittype }}
+    - name: 'systemctl {{ unit_status }} "{{ unit }}.{{ unittype }}"'
     - watch:
       - cmd: reload_systemd_configuration
 
@@ -34,7 +34,7 @@ systemd_systemd_units_cmd_enable_or_disable_{{ unit }}_{{ unittype }}:
         {% set activation_status = unitconfig.status if unitconfig.status is defined and unitconfig.status == 'start' else 'stop' %}
 systemd_systemd_units_activate_or_deactivate_{{ unit }}_{{ unittype }}:
   cmd.wait:  # noqa: 213
-    - name: systemctl {{ activation_status }} {{ unit }}.{{ unittype }}
+    - name: 'systemctl {{ activation_status }} "{{ unit }}.{{ unittype }}"'
     - require:
       - cmd: systemd_systemd_units_cmd_enable_or_disable_{{ unit }}_{{ unittype }}
       - cmd: reload_systemd_configuration
